@@ -1,6 +1,6 @@
 <script>
     function load_datatable() {
-        let datatable = $('#lista_monedas').DataTable({
+        let datatable = $('#lista_formas_pago').DataTable({
             serverSide  : true,
             paging      : true,
             searching   : true,
@@ -27,7 +27,7 @@
                     previous: "Anterior"
                 }
             },
-            ajax: "{{ route('monedas.listar') }}",
+            ajax: "{{ route('formaspago.lista') }}",
             columns: [
                 { data: 'action', className: 'text-center' },
                 { data: 'nombre', className: 'text-center' },

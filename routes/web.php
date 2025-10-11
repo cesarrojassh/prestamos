@@ -50,17 +50,24 @@ Route::get('/prestamos',                 [PrestamosController::class, 'index'])-
 Route::get('/prestamos.listar',          [PrestamosController::class, 'listar'])->name('prestamos.listar');
 Route::post('/prestamos.store',          [PrestamosController::class, 'store'])->name('prestamos.store');
 Route::put('/prestamos.update',          [PrestamosController::class, 'update'])->name('prestamos.update');
-Route::get('/prestamos.simular',         [PrestamosController::class, 'simular'])->name('prestamos.simular');
+Route::post('/prestamos.simular',         [PrestamosController::class, 'simular'])->name('prestamos.simular');
 
 //Monedas
 Route::get('/monedas',                   [MonedaController::class, 'index'])->name('monedas.index');
 Route::get('/monedas.listar',            [MonedaController::class, 'listar'])->name('monedas.listar');
 Route::post('/monedas.store',            [MonedaController::class, 'store'])->name('monedas.store');
 Route::put('/monedas.update',            [MonedaController::class, 'update'])->name('monedas.update');
-Route::get('/monedas.edit',              [MonedaController::class, 'edit'])->name('monedas.edit');
+Route::post('/monedas.edit',              [MonedaController::class, 'edit'])->name('monedas.edit');
+Route::post('/monedas.destroy',           [MonedaController::class, 'destroy'])->name('monedas.destroy');
+
 
 
 
 //Formas de pago
 
 Route::get('/formaspago',               [FormapagoController::class, 'index'])->name('formaspago.index');
+Route::post('/formaspago.store',        [FormapagoController::class, 'store'])->name('formapagos.store');
+Route::post('/formaspago.update',        [FormapagoController::class, 'update'])->name('formaspago.update');
+Route::post('/formaspago.edit',          [FormapagoController::class, 'edit'])->name('formaspago.edit');
+Route::get('/formaspago.lista',         [FormapagoController::class, 'lista'])->name('formaspago.lista');
+Route::post('/formaspago.delete',       [FormapagoController::class, 'delete'])->name('formaspago.delete');

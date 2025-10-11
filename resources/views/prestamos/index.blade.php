@@ -40,19 +40,20 @@
                 <div class="col-md-4">
                     <label for="forma_pago" class="form-label">Forma de pago</label>
                     <select id="forma_pago" class="form-select" required>
-                        <option value="">Seleccione</option>
-                        <option value="mensual">Mensual</option>
-                        <option value="quincenal">Quincenal</option>
-                        <option value="semanal">Semanal</option>
+                        <option value="">-Selecione una forma de pago-</option>
+                      @foreach($formas as $forma)
+                        <option value="{{ $forma->id }}">{{ $forma->nombre }}</option>
+                       @endforeach
                     </select>
                 </div>
 
                 <div class="col-md-4">
                     <label for="moneda" class="form-label">Moneda</label>
                     <select id="moneda" class="form-select" required>
-                        <option value="">Seleccione</option>
-                        <option value="PEN">Soles (S/)</option>
-                        <option value="USD">Dólares ($)</option>
+                        <option value="">-Selecione una moneda-</option>
+                       @foreach($monedas as $moneda)
+                        <option value="{{ $moneda->id }}">{{ $moneda->nombre }}</option>
+                       @endforeach
                     </select>
                 </div>
 
@@ -102,13 +103,27 @@
                             </p>
 
                             <div class="d-flex justify-content-center gap-2">
-                                <button class="btn btn-success px-4" id="btnConfirmar">Confirmar préstamo</button>
+                                <button class="btn btn-success px-4 btnConfirmar" id="btnConfirmar">Confirmar préstamo</button>
                                 <button class="btn btn-danger px-4" id="btnCancelar">Cancelar</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
 
         <!-- FIN RESULTADOS -->
     </div>

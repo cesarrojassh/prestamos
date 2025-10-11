@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Moneda extends Model
+class Formas extends Model
 {
     use HasFactory;
-    protected $fillable = [
+     protected $fillable = [
         'nombre',
        
     ];
-    protected $table      = 'monedas';
+    protected $table      = 'formas';
     protected $primaryKey = 'id';
 }
