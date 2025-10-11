@@ -103,30 +103,14 @@
                             </p>
 
                             <div class="d-flex justify-content-center gap-2">
-                                <button class="btn btn-success px-4 btnConfirmar" id="btnConfirmar">Confirmar préstamo</button>
+                                <button class="btn btn-success px-4 btnConfirmar" id="btnConfirmar">Ver Cuotas</button>
                                 <button class="btn btn-danger px-4" id="btnCancelar">Cancelar</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-
-        <!-- FIN RESULTADOS -->
-    </div>
+        </div>
 </div>
 
 
@@ -161,8 +145,36 @@
   </div>
 </div>
 
-
-
+<!-- MODAL DETALLE CUOTAS -->
+<div class="modal fade" id="detalleCuotasModal" tabindex="-1" aria-labelledby="detalleCuotasModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content shadow-lg border-0 rounded-4">
+      <!-- HEADER -->
+      <div class="modal-header border-0  text-white py-3 rounded-top-4">
+        <h5 class="modal-title fw-semibold" id="detalleCuotasModalLabel">
+          Detalle de Cuotas
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body bg-light">
+        <div class="table-responsive">
+          <table id="detalle_cuotas" class="table table-striped table-bordered" style="width:100%;font-size: 12px;">
+            <thead>
+              <tr>
+                <th width="" class="text-left">N° Cuota</th>
+                <th width="" class="text-left">Fecha de Vencimiento</th>
+                <th width="" class="text-left">Monto de Cuota</th>
+              </tr>
+            </thead>
+            <tbody class="cuotasDetalleBody" id="cuotasDetalleBody">
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 @endsection

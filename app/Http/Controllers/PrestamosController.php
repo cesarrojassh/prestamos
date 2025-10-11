@@ -118,7 +118,14 @@ class PrestamosController extends Controller
             'monto_cuota' => round($valorCuota, 2)
         ];
     }
-
+    $htmlCuotas = '';
+    foreach ($cuotasDetalle as $cuota) {
+        $htmlCuotas .= '<tr>';
+        $htmlCuotas .= '<td>' . $cuota['nro'] . '</td>';
+        $htmlCuotas .= '<td>' . $cuota['fecha_vencimiento'] . '</td>';
+        $htmlCuotas .= '<td>S/ ' . number_format($cuota['monto_cuota'], 2)  . '</td>';
+        $htmlCuotas .= '</tr>';
+    }
    
     return response()->json([
         'status' => true,
@@ -129,7 +136,7 @@ class PrestamosController extends Controller
             'interesTotal' => round($interesTotal, 2),
             'montoTotal'   => round($montoTotal, 2),
             'valorCuota'   => round($valorCuota, 2),
-            'cuotasDetalle' => $cuotasDetalle
+            'cuotasDetalle' => $htmlCuotas
         ]
     ]);
 }

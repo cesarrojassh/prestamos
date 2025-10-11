@@ -86,22 +86,22 @@ $('body').on('click', '.btnConfirmar', function(){
             $('.btnConfirmar').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...');
         },
         success: function(response) {
-            if(response.success){
-                var msg  = 'Préstamo registrado con éxito';
-                var type = 'success';
+            if(!response.status){
+                var msg  = 'Error al registrar el préstamo.';
+                var type = 'danger';
                 var icon = 'bi bi-check-circle'
                 toast_info(msg, type, icon);
-                setTimeout(function() {
-                    window.location.href = "{{ route('prestamos.index') }}";
-                }, 2000); 
-            } else {
-                var msg  = response.message;
-                var type = 'error';
-                var icon = 'bi bi-x-circle'
-                toast_info(msg, type, icon);
-                $('.btnConfirmar').prop('disabled', false);
-                $('.btnConfirmar').html('Confirmar préstamo');
+               
             }
+            var msg  = response.message;
+            var type = 'error';
+            var icon = 'bi bi-x-circle'
+            toast_info(msg, type, icon);
+            $('.btnConfirmar').prop('disabled', false);
+            $('.btnConfirmar').html('Confirmar préstamo');
+            $('.cuotasDetalleBody').html(response.data.cuotasDetalle);
+            $('#detalleCuotasModal').modal('show');
+            
         },
         error: function() {
             alert("Ocurrió un error al registrar el préstamo.");
