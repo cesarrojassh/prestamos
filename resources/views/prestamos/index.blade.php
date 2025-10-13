@@ -158,20 +158,25 @@
       </div>
       <div class="modal-body bg-light">
         <div class="table-responsive">
-          <table id="detalle_cuotas" class="table table-striped table-bordered" style="width:100%;font-size: 12px;">
+          <table id="detalle_cuotas" class="table table-striped table-bordered" style="width:100%;font-size: 10px;">
             <thead>
               <tr>
-                <th width="" class="text-left">N° Cuota</th>
-                <th width="" class="text-left">Fecha de Vencimiento</th>
-                <th width="" class="text-left">Monto de Cuota</th>
+                <th width="" class="text-center">N° Cuota</th>
+                <th width="" class="text-center">Fecha de Vencimiento</th>
+                <th width="" class="text-center">Monto de Cuota</th>
               </tr>
             </thead>
             <tbody class="cuotasDetalleBody" id="cuotasDetalleBody">
               
             </tbody>
           </table>
+           <div id="paginacion" class="text-center mt-3"></div>
         </div>
       </div>
+        <div class="modal-footer border-0">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="btnGuardarPrestamo">Guardar Préstamo</button>
+        </div>
     </div>
   </div>
 </div>

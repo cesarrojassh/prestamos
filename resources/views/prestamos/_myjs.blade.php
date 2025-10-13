@@ -5,7 +5,10 @@
 
  $('#btnCancelar').click(function() {
         $('#formSimulador')[0].reset();
-        
+        $('#valorCuota').empty().text('S/ 0.00');
+        $('#valorInteres').empty().text('S/ 0.00');
+        $('#montoTotal').empty().text('S/ 0.00');
+
  });
 
 $('#btnSimular').click(function() {
@@ -56,11 +59,12 @@ $('#btnSimular').click(function() {
     });
 });
 
+// Confirmar préstamo → abre el modal con cuotas paginadas
 $('body').on('click', '.btnConfirmar', function(){
     if(!validarCampos()){
         return;
     }
-    
+
     var idcliente = $('#cliente').val();
     var monto = parseFloat($('#monto').val());
     var interes = parseFloat($('#interes').val());
@@ -68,6 +72,7 @@ $('body').on('click', '.btnConfirmar', function(){
     var forma_pago = $('#forma_pago').val();
     var moneda = $('#moneda').val();
     var fecha_emision = $('#fecha_emision').val();
+
     $.ajax({
         url   : "{{ route('prestamos.store') }}",
         type  : "POST",
@@ -79,37 +84,66 @@ $('body').on('click', '.btnConfirmar', function(){
             cuotas        : cuotas,
             forma_pago    : forma_pago,
             moneda        : moneda,
-            fecha_emision : fecha_emision
+            fecha_emision : fecha_emision,
+            page          : 1 // primera página
         },
         beforeSend: function() {
             $('.btnConfirmar').prop('disabled', true);
-            $('.btnConfirmar').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...');
+            $('.btnConfirmar').html('<span class="spinner-border spinner-border-sm"></span> Cargando...');
         },
         success: function(response) {
-            if(!response.status){
-                var msg  = 'Error al registrar el préstamo.';
-                var type = 'danger';
-                var icon = 'bi bi-check-circle'
-                toast_info(msg, type, icon);
-               
-            }
-            var msg  = response.message;
-            var type = 'error';
-            var icon = 'bi bi-x-circle'
-            toast_info(msg, type, icon);
-            $('.btnConfirmar').prop('disabled', false);
-            $('.btnConfirmar').html('Confirmar préstamo');
-            $('.cuotasDetalleBody').html(response.data.cuotasDetalle);
-            $('#detalleCuotasModal').modal('show');
+            $('.btnConfirmar').prop('disabled', false).html('Ver Cuotas');
             
+            if(response.status === 'success'){
+                $('#cuotasDetalleBody').html(response.data.cuotasDetalle);
+                $('#paginacion').html(response.data.paginacion);
+                $('#detalleCuotasModal').modal('show');
+            } else {
+                toast_info('Error al calcular el préstamo', 'danger', 'bi bi-x-circle');
+            }
         },
         error: function() {
-            alert("Ocurrió un error al registrar el préstamo.");
-            $('.btnConfirmar').prop('disabled', false);
-            $('.btnConfirmar').html('Confirmar préstamo');
+            $('.btnConfirmar').prop('disabled', false).html('Ver Cuotas');
+            toast_info('Ocurrió un error en la solicitud', 'danger', 'bi bi-x-circle');
         }
     });
-})
+});
+
+
+// Función global para cambiar de página
+function cargarPaginaCuotas(page){
+    var idcliente = $('#cliente').val();
+    var monto = parseFloat($('#monto').val());
+    var interes = parseFloat($('#interes').val());
+    var cuotas = parseInt($('#cuotas').val());
+    var forma_pago = $('#forma_pago').val();
+    var moneda = $('#moneda').val();
+    var fecha_emision = $('#fecha_emision').val();
+
+    $.ajax({
+        url   : "{{ route('prestamos.store') }}",
+        type  : "POST",
+        data  : {
+            _token        : "{{ csrf_token() }}",
+            cliente       : idcliente, 
+            monto         : monto,
+            interes       : interes,
+            cuotas        : cuotas,
+            forma_pago    : forma_pago,
+            moneda        : moneda,
+            fecha_emision : fecha_emision,
+            page          : page
+        },
+        success: function(response) {
+            if(response.status === 'success'){
+                $('#cuotasDetalleBody').html(response.data.cuotasDetalle);
+                $('#paginacion').html(response.data.paginacion);
+            }
+        }
+    });
+}
+
+
 
 function validarCampos(){
     var campos = [

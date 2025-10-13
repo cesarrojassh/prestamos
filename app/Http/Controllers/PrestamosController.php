@@ -55,91 +55,86 @@ class PrestamosController extends Controller
 
     }
 
-   public function store(Request $request)
+    public function store(Request $request)
 {
-    if(!$request->ajax()){
+    if (!$request->ajax()) {
         return response()->json([
-            'status' => false,
-            'msg'    => 'Error en la solicitud, intente nuevamente',
-            'type'   => 'warning',
-            'icon'   => 'bi bi-exclamation-triangle',
+            'status' => 'error',
+            'message' => 'Solicitud inválida.'
         ]);
     }
 
-    $cliente       = $request->input('cliente');
     $monto         = (float) $request->input('monto');
     $interes       = (float) $request->input('interes');
     $cuotas        = (int) $request->input('cuotas');
     $forma_pago    = $request->input('forma_pago');
-    $moneda        = $request->input('moneda');
     $fecha_emision = $request->input('fecha_emision');
-    $idusuario     = $request->session()->get('id');
+    $page          = (int) $request->input('page', 1);
+    $perPage       = 10;
 
-    // ⚙️ Validación básica
-    if (!$cliente || $monto <= 0 || $interes < 0 || $cuotas <= 0) {
-        return response()->json([
-            'status' => false,
-            'msg'    => 'Por favor complete todos los campos correctamente.',
-            'type'   => 'error',
-            'icon'   => 'bi bi-x-circle',
-        ]);
-    }
+    // Cálculos financieros
+    $interes_total = $monto * ($interes / 100);
+    $monto_total   = $monto + $interes_total;
+    $valor_cuota   = round($monto_total / $cuotas, 2);
 
-    // 💰 Calcular valores financieros
-    $interesTotal = $monto * ($interes / 100);
-    $montoTotal   = $monto + $interesTotal;
-    $valorCuota   = $montoTotal / $cuotas;
-
-    // 📅 Calcular fechas según forma de pago
-    $fecha = new \DateTime($fecha_emision);
-    $cuotasDetalle = [];
+    // Generar todas las cuotas
+    $fecha = \Carbon\Carbon::parse($fecha_emision);
+    $cuotasArray = [];
 
     for ($i = 1; $i <= $cuotas; $i++) {
-        // Aumentar la fecha según el tipo de forma de pago
-        switch (strtolower($forma_pago)) {
-            case '3':
-                $fecha->modify('+1 day');
-                break;
-            case '4':
-                $fecha->modify('+7 days');
-                break;
-            case '5':
-                $fecha->modify('+15 days');
-                break;
+        switch ($forma_pago) {
+            case '3': $fecha->addDay(); break;       
+            case '4': $fecha->addWeek(); break;    
+            case '5': $fecha->addDays(15); break;    
             case '6':
-            default:
-                $fecha->modify('+1 month');
-                break;
+            default:  $fecha->addMonth(); break;     
         }
 
-        $cuotasDetalle[] = [
+        $cuotasArray[] = [
             'nro' => $i,
             'fecha_vencimiento' => $fecha->format('Y-m-d'),
-            'monto_cuota' => round($valorCuota, 2)
+            'monto_cuota' => $valor_cuota
         ];
     }
+
+   
+    $total = count($cuotasArray);
+    $totalPages = ceil($total / $perPage);
+    $offset = ($page - 1) * $perPage;
+    $cuotasPage = array_slice($cuotasArray, $offset, $perPage);
+
+   
     $htmlCuotas = '';
-    foreach ($cuotasDetalle as $cuota) {
+    foreach ($cuotasPage as $cuota) {
         $htmlCuotas .= '<tr>';
-        $htmlCuotas .= '<td>' . $cuota['nro'] . '</td>';
-        $htmlCuotas .= '<td>' . $cuota['fecha_vencimiento'] . '</td>';
-        $htmlCuotas .= '<td>S/ ' . number_format($cuota['monto_cuota'], 2)  . '</td>';
+        $htmlCuotas .= '<td class="text-center">' . $cuota['nro'] . '</td>';
+        $htmlCuotas .= '<td class="text-center">' . str_replace('-', '/', $cuota['fecha_vencimiento']) . '</td>';
+        $htmlCuotas .= '<td class="text-center">S/ ' . number_format($cuota['monto_cuota'], 2) . '</td>';
         $htmlCuotas .= '</tr>';
     }
+
    
+    $htmlPaginacion = '<nav><ul class="pagination justify-content-center">';
+    for ($i = 1; $i <= $totalPages; $i++) {
+        $active = ($i == $page) ? 'active' : '';
+        $htmlPaginacion .= "<li class='page-item {$active}'>
+            <button class='page-link' onclick='cargarPaginaCuotas({$i})'>{$i}</button>
+        </li>";
+    }
+    $htmlPaginacion .= '</ul></nav>';
+
     return response()->json([
-        'status' => true,
-        'msg'    => 'Cálculo realizado correctamente.',
-        'type'   => 'success',
-        'icon'   => 'bi bi-check-circle',
-        'data'   => [
-            'interesTotal' => round($interesTotal, 2),
-            'montoTotal'   => round($montoTotal, 2),
-            'valorCuota'   => round($valorCuota, 2),
-            'cuotasDetalle' => $htmlCuotas
+        'status' => 'success',
+        'data' => [
+            'cuotasDetalle' => $htmlCuotas,
+            'paginacion' => $htmlPaginacion,
+            'valor_cuota' => $valor_cuota,
+            'monto_total' => $monto_total,
+            'interes_total' => $interes_total
         ]
     ]);
 }
+
 
 }
 
