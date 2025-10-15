@@ -8,6 +8,7 @@
         $('#valorCuota').empty().text('S/ 0.00');
         $('#valorInteres').empty().text('S/ 0.00');
         $('#montoTotal').empty().text('S/ 0.00');
+        $('#cliente_id').val('');
 
  });
 
@@ -143,7 +144,53 @@ function cargarPaginaCuotas(page){
     });
 }
 
-
+$('#btnGuardarPrestamo').click(function(){
+    var idcliente = $('#cliente_id').val();
+    var monto = parseFloat($('#monto').val());
+    var interes = parseFloat($('#interes').val());
+    var cuotas = parseInt($('#cuotas').val());
+    var forma_pago = $('#forma_pago').val();
+    var moneda = $('#moneda').val();
+    var fecha_emision = $('#fecha_emision').val();
+    if(!validarCampos()){
+        return;
+    }
+    $.ajax({
+        url   : "{{ route('prestamos.guardar') }}",
+        type  : "POST",
+        data  : {
+            _token        : "{{ csrf_token() }}",
+            cliente       : idcliente, 
+            monto         : monto,
+            interes       : interes,
+            cuotas        : cuotas,
+            forma_pago    : forma_pago,
+            moneda        : moneda,
+            fecha_emision : fecha_emision
+        },
+        beforeSend: function() {
+            $('#btnGuardarPrestamo').prop('disabled', true);
+            $('#btnGuardarPrestamo').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Guardando...');
+        },
+        success: function(response) {
+            if(response.status === 'success'){
+                toast_info('Préstamo guardado con éxito', 'success', 'bi bi-check-circle');
+                setTimeout(function(){
+                    window.location.href = "{{ route('prestamos.index') }}";
+                }, 1500);
+            } else {
+                toast_info('Error al guardar el préstamo', 'danger', 'bi bi-x-circle');
+            }
+            $('#btnGuardarPrestamo').prop('disabled', false);
+            $('#btnGuardarPrestamo').html('Guardar Préstamo');
+        },
+        error: function() {
+            toast_info('Ocurrió un error en la solicitud', 'danger', 'bi bi-x-circle');
+            $('#btnGuardarPrestamo').prop('disabled', false);
+            $('#btnGuardarPrestamo').html('Guardar Préstamo');
+        }
+    });
+});
 
 function validarCampos(){
     var campos = [

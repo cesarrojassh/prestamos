@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Formas;
 use App\Models\Moneda;
+use App\Models\Prestamo;
+use App\Models\PrestamoDetalle;
+use App\Models\Cliente;
 
 class PrestamosController extends Controller
 {
@@ -21,10 +24,27 @@ class PrestamosController extends Controller
 
     public function listar(Request $request)
     {
-        if(!$request->session()->get('id')) {
-            return redirect('/');
+        if(!$request->ajax()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Solicitud inválida.'
+            ]);
         }
-        return response()->json(['data' => []]);
+        $clientes = Cliente::select('*')->get();
+        return datatables()
+        ->of($clientes)
+        ->addColumn('estado_prestamos', function ($cliente) {
+            $estado = $cliente->estado_prestamo;
+            if ($estado == 0) {
+                return '<span class="badge bg-success">DISPONIBLE</span>';
+            } else {
+                return '<span class="badge bg-danger">CON PRESTAMO</span>';
+            }
+            
+        })
+        
+        ->rawColumns(['estado_prestamos'])
+        ->make(true);
     }
 
     public function simular(Request $request)
@@ -92,7 +112,7 @@ class PrestamosController extends Controller
 
         $cuotasArray[] = [
             'nro' => $i,
-            'fecha_vencimiento' => $fecha->format('Y-m-d'),
+            'fecha_vencimiento' => $fecha->format('d-m-Y'),
             'monto_cuota' => $valor_cuota
         ];
     }
@@ -134,6 +154,72 @@ class PrestamosController extends Controller
         ]
     ]);
 }
+
+    public function guardar(Request $request)
+    {
+        if (!$request->ajax()) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Solicitud inválida.'
+        ]);
+      }
+      
+     
+      $interes          = (float) $request->input('interes');
+      $monto            = (float) $request->input('monto');
+      $cuotas           = (int) $request->input('cuotas');
+      $forma_pago       = $request->input('forma_pago');
+      $moneda           = $request->input('moneda');
+      $fecha_emision    = $request->input('fecha_emision');
+      $idusuario        = (int) $request->input('idusuario');
+
+      //Insertar en la tabla prestamo
+
+      $prestamo = new Prestamo();
+      $prestamo->cliente_id    = $request->input('cliente');
+      $prestamo->idusuario     = $idusuario;
+      $prestamo->monto         = $monto;
+      $prestamo->interes       = $interes;
+      $prestamo->cuotas        = $cuotas;
+      $prestamo->forma_pago    = $forma_pago;
+      $prestamo->moneda        = $moneda;
+      $prestamo->fecha_emision = $fecha_emision;
+      $prestamo->interes_total = $monto * ($interes / 100);
+      $prestamo->monto_total   = $monto + $prestamo->interes_total;
+      $prestamo->valor_cuota   = round($prestamo->monto_total / $cuotas, 2);
+      $prestamo->save();
+
+
+
+
+
+      $interesTotal     = $monto * ($interes / 100);
+      $montoTotal       = $monto + $interesTotal;
+      $valorCuota       = round($montoTotal / $cuotas, 2);
+      $fecha            = \Carbon\Carbon::parse($fecha_emision);
+      $cuotasArray      = [];
+        for ($i = 1; $i <= $cuotas; $i++) {
+            switch ($forma_pago) {
+                case '3': $fecha->addDay(); break;       
+                case '4': $fecha->addWeek(); break;    
+                case '5': $fecha->addDays(15); break;    
+                case '6':
+                default:  $fecha->addMonth(); break;     
+            }
+
+            $cuota = new PrestamoDetalle();
+            $cuota->prestamo_id = $prestamo->id;
+            $cuota->nro_cuota = $i;
+            $cuota->fecha_vencimiento = $fecha->format('Y-m-d');
+            $cuota->monto_cuota = $valorCuota;
+            $cuota->save();
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Préstamo guardado con éxito.'
+        ]);
+    }
 
 
 }

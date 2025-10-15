@@ -102,6 +102,7 @@ class ClienteController extends Controller
           $cliente->nom        = $request->cli_nom;
           $cliente->direcion   = $request->cli_direcion;
           $cliente->telefono   = $request->cli_telefono;
+          $cliente->estado_prestamo = '0';
           $cliente->save();
           if ($cliente) {
                 return response()->json([

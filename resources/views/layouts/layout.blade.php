@@ -361,6 +361,7 @@
          
           <ul>
             <li><a href="{{ route('prestamos.index')}}"><i class="material-icons-outlined">arrow_right</i>Solicitud</a></li>
+            <li><a href="{{ route('prestamos.detalle')}}"><i class="material-icons-outlined">arrow_right</i>Lista de prestamos</a></li>
           </ul>
         </li>
          <li>

@@ -16,6 +16,8 @@
                     <label for="cliente" class="form-label">Cliente</label>
                     <div class="input-group">
                         <input type="text" id="cliente" class="form-control" placeholder="Ingrese nombre o documento" required>
+                        <input type="hidden" id="cliente_id">
+
                         <button type="button" class="btn btn-outline-secondary" id="btnBuscarCliente">
                             <i class="bi bi-search"></i>
                         </button>
@@ -75,7 +77,7 @@
             <div id="resultado" class="mt-4 d-flex justify-content-center">
                 <div class="col-md-6">
                     <div class="card border-0 shadow-lg rounded-4" 
-                        style="background: linear-gradient(145deg, #ffffff, #175ec94d); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);">
+                        style="background: linear-gradient(145deg, #ffffff31, #175ec94d); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);">
                         <div class="card-header text-white text-center fw-bold rounded-top-4"
                             style="background: linear-gradient(90deg, #17a2b8, #0dcaf0); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);">
                             RESULTADOS DEL PRÉSTAMO
@@ -98,7 +100,7 @@
                                 </tbody>
                             </table>
 
-                            <p class="text-muted small mb-3">
+                            <p class="text-muted small mb-3" style="color:white !important;">
                                 Los resultados serán actualizados después de calcular el préstamo.
                             </p>
 
@@ -127,9 +129,10 @@
       </div>
        <div class="modal-body bg-light">
          <div class="table-responsive">
-            <table id="lista_clientes_prestamos" class="table table-striped table-bordered" style="width:100%;font-size: 12px;">
+            <table id="lista_clientes_prestamos" class="table table-striped table-bordered lista_clientes_prestamos" style="width:100%;font-size: 12px;">
                 <thead>
                     <tr>
+                        <th width="" class="text-left">ID</th>
                         <th width="" class="text-left">Nombre</th>
                         <th width="" class="text-left">N°Documento</th>
                         <th width="" class="text-left">Estado</th>
@@ -184,6 +187,6 @@
 
 @endsection
 @section('scripts')
-@include('prestamos._myjs')
-@include('prestamos._table')
+  @include('prestamos._myjs')
+  @include('prestamos._table')
 @endsection

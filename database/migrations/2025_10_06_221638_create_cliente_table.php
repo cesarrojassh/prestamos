@@ -22,6 +22,7 @@ class CreateClienteTable extends Migration
             $table->string('direcion');
             $table->string('telefono');
             $table->tinyInteger('estado')->default(1);
+            $table->tinyInteger('estado_prestamo')->default(0);
         });
     }
 

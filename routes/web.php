@@ -8,6 +8,8 @@ use App\Http\Controllers\ClienteController;
 Use App\Http\Controllers\PrestamosController;
 Use App\Http\Controllers\MonedaController;
 Use App\Http\Controllers\FormapagoController;
+Use App\Http\Controllers\PrestamoDetalleController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -50,7 +52,12 @@ Route::get('/prestamos',                 [PrestamosController::class, 'index'])-
 Route::get('/prestamos.listar',          [PrestamosController::class, 'listar'])->name('prestamos.listar');
 Route::post('/prestamos.store',          [PrestamosController::class, 'store'])->name('prestamos.store');
 Route::put('/prestamos.update',          [PrestamosController::class, 'update'])->name('prestamos.update');
-Route::post('/prestamos.simular',         [PrestamosController::class, 'simular'])->name('prestamos.simular');
+Route::post('/prestamos.simular',        [PrestamosController::class, 'simular'])->name('prestamos.simular');
+Route::post('/prestamos.guardar',        [PrestamosController::class, 'guardar'])->name('prestamos.guardar');
+
+
+//Detalle de prestamos
+Route::get('/prestamos.detalle',         [PrestamoDetalleController::class, 'detalle'])->name('prestamos.detalle');
 
 //Monedas
 Route::get('/monedas',                   [MonedaController::class, 'index'])->name('monedas.index');
