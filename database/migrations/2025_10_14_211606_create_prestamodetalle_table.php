@@ -21,6 +21,7 @@ class CreatePrestamodetalleTable extends Migration
             $table->decimal('monto_cuota', 10, 2);  
             $table->integer('nro_cuota');
             $table->foreign('prestamo_id')->references('id')->on('prestamo')->onDelete('cascade');
+            $table->integer('estado')->default('0');
 
         });
     }

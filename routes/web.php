@@ -58,14 +58,18 @@ Route::post('/prestamos.guardar',        [PrestamosController::class, 'guardar']
 
 //Detalle de prestamos
 Route::get('/prestamos.detalle',         [PrestamoDetalleController::class, 'detalle'])->name('prestamos.detalle');
+Route::get('/prestamos.listarDetalle',   [PrestamoDetalleController::class, 'listar'])->name('prestamos.listarDetalle');
+Route::post('/prestamos.pagarCuotas',    [PrestamoDetalleController::class, 'pagarCuotas'])->name('prestamos.pagarCuotas');
+Route::post('/prestamos.datos',          [PrestamoDetalleController::class, 'datos'])->name('prestamos.datos');
+Route::post('/prestamos.efectuar_pago',  [PrestamoDetalleController::class, 'pagar'])->name('prestamos.efectuar_pago');
 
 //Monedas
 Route::get('/monedas',                   [MonedaController::class, 'index'])->name('monedas.index');
 Route::get('/monedas.listar',            [MonedaController::class, 'listar'])->name('monedas.listar');
 Route::post('/monedas.store',            [MonedaController::class, 'store'])->name('monedas.store');
 Route::put('/monedas.update',            [MonedaController::class, 'update'])->name('monedas.update');
-Route::post('/monedas.edit',              [MonedaController::class, 'edit'])->name('monedas.edit');
-Route::post('/monedas.destroy',           [MonedaController::class, 'destroy'])->name('monedas.destroy');
+Route::post('/monedas.edit',             [MonedaController::class, 'edit'])->name('monedas.edit');
+Route::post('/monedas.destroy',          [MonedaController::class, 'destroy'])->name('monedas.destroy');
 
 
 

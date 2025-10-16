@@ -171,7 +171,7 @@ class PrestamosController extends Controller
       $forma_pago       = $request->input('forma_pago');
       $moneda           = $request->input('moneda');
       $fecha_emision    = $request->input('fecha_emision');
-      $idusuario        = (int) $request->input('idusuario');
+      $idusuario        = (int) $request->session()->get('id');
 
       //Insertar en la tabla prestamo
 
@@ -221,6 +221,7 @@ class PrestamosController extends Controller
         ]);
     }
 
+  
 
 }
 
