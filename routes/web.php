@@ -62,6 +62,7 @@ Route::get('/prestamos.listarDetalle',   [PrestamoDetalleController::class, 'lis
 Route::post('/prestamos.pagarCuotas',    [PrestamoDetalleController::class, 'pagarCuotas'])->name('prestamos.pagarCuotas');
 Route::post('/prestamos.datos',          [PrestamoDetalleController::class, 'datos'])->name('prestamos.datos');
 Route::post('/prestamos.efectuar_pago',  [PrestamoDetalleController::class, 'pagar'])->name('prestamos.efectuar_pago');
+Route::get('/prestamos/{prestamo}/cuota/{cuota}/pdf', [PrestamoDetalleController::class, 'pdf'])->name('prestamos.pdf');
 
 //Monedas
 Route::get('/monedas',                   [MonedaController::class, 'index'])->name('monedas.index');

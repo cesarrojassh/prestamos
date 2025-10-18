@@ -28,13 +28,16 @@
                 $('#cuotas_pagadas').val(r.data.cuotas_pagadas);
                 $('#moneda').val(r.data.moneda);
                 $('#usuario').val(r.data.usuario);
+                $('#monto_cuota').val(r.cuota.monto_cuota);
+                $('#cuotas_pagadas').val(r.cuotas_pagadas+ ' de ' + r.data.cuotas);
             },
         })
         $('#modal_detalle_prestamos').modal('show');
         load_cuotas(id);
     }
 
-   function pagarCuota(id) {
+   function pagarCuota(id, idprestamo) {
+    
     Swal.fire({
         text: "¿Deseas pagar esta cuota?",
         icon: "warning",
@@ -54,6 +57,17 @@
                 },
                 dataType: "json",
                 success: function (r) {
+                    if(r.señal == 1){
+                        Swal.fire({
+                            title: "El prestamo pagada correctamente",
+                            icon: "success",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                     
+                        load_cuotas(idprestamo);
+                       
+                    }
                     if (r.status) {
                         Swal.fire({
                             title: "Cuota pagada correctamente",
@@ -61,6 +75,7 @@
                             timer: 2000,
                             showConfirmButton: false
                         });
+                        load_cuotas(idprestamo)
                        
                     } else {
                         Swal.fire({
@@ -81,5 +96,14 @@
         }
     });
 }
+
+function pagado(){
+    Swal.fire({
+        title: "Cuota pagaga",
+        text: "La cuota ya fue pagada",
+        icon: "warning"
+    });
+}
+
 
 </script>

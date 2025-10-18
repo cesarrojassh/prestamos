@@ -8,6 +8,7 @@ use App\Models\PrestamoDetalle;
 use App\Models\Cliente;
 use App\Models\Moneda;
 use App\Models\Formapago;
+use PDF;
 
 class PrestamoDetalleController extends Controller
 {
@@ -96,7 +97,7 @@ class PrestamoDetalleController extends Controller
             ]);
         }
         
-        $id = $request->id;
+        $id         = $request->id;
         $cuotas = PrestamoDetalle::where('prestamo_id', $id)->get();
         return datatables()
         ->of($cuotas)
@@ -120,10 +121,19 @@ class PrestamoDetalleController extends Controller
         })
         ->addColumn('acciones', function ($cuota) {
             if ($cuota->estado == 0) {
-                return '<a class="text-warning" onclick="pagarCuota('.$cuota->id.')"><i class="bi bi-cash-stack me-1 fs-7"></i></a>
-                <a class="text-primary" onclick="pagarCuota('.$cuota->id.')"><i class="bi bi-file-earmark-pdf me-1 fs-7"></i></a>';
+              return '<a class="text-warning" onclick="pagarCuota('.$cuota->id.', '.$cuota->prestamo_id.')"><i class="bi bi-cash-stack me-1 fs-7"></i></a>
+               <a class="text-primary" title="Ver comprobante PDF" 
+                    href="'.route('prestamos.pdf', ['prestamo' => $cuota->prestamo_id, 'cuota' => $cuota->id]).'" 
+                    target="_blank">
+                    <i class="bi bi-file-earmark-pdf me-1 fs-7"></i>
+               </a>';  
             } else {
-                return '';      
+                return '<a class="text-warning" onclick="pagado()"><i class="bi bi-cash-stack me-1 fs-7"></i></a>
+                 <a class="text-primary" title="Ver comprobante PDF" 
+                    href="'.route('prestamos.pdf', ['prestamo' => $cuota->prestamo_id, 'cuota' => $cuota->id]).'" 
+                    target="_blank">
+                    <i class="bi bi-file-earmark-pdf me-1 fs-7"></i>
+               </a>';   
             }
         })
         ->rawColumns(['nro_cuota', 'fecha', 'monto', 'estado', 'acciones'])
@@ -150,6 +160,11 @@ class PrestamoDetalleController extends Controller
         ->where('prestamo.id', $id)
         ->first();
 
+        $C_pagadas      = PrestamoDetalle::where('prestamo_id', $id)->first();
+        $cuotas_pagadas = PrestamoDetalle::where('prestamo_id', $id)->where('estado', 1)->count();
+
+
+
         $nro = str_pad($prestamos->idprestamo, 6, "0", STR_PAD_LEFT);
         if (!$prestamos) {
             return response()->json([
@@ -163,9 +178,11 @@ class PrestamoDetalleController extends Controller
         
 
         return response()->json([
-            'status' => true,
-            'data'   => $prestamos,
-            'nro'    => $nro
+            'status'        => true,
+            'data'          => $prestamos,
+            'nro'           => $nro,
+            'cuota'         => $C_pagadas,
+            'cuotas_pagadas'=> $cuotas_pagadas
         ]);
     }
 
@@ -207,14 +224,16 @@ class PrestamoDetalleController extends Controller
         $prestamo_id    = $cuota->prestamo_id;
         $total_cuotas   = PrestamoDetalle::where('prestamo_id', $prestamo_id)->count();
         $cuotas_pagadas = PrestamoDetalle::where('prestamo_id', $prestamo_id)->where('estado', 1)->count();
-
         if ($total_cuotas == $cuotas_pagadas) {
             $prestamo = Prestamo::find($prestamo_id);
             if ($prestamo) {
                 $prestamo->estado = 'cancelado';
                 $prestamo->save();
+                
+               
             }
         }
+        
 
         return response()->json([
             'status' => true,
@@ -223,6 +242,40 @@ class PrestamoDetalleController extends Controller
             'icon'   => 'bi bi-check-circle',
         ]);
     }
+
+    public function pdf($prestamo, $cuota)
+    {
+        $prestamos = Prestamo::select('prestamo.*', 'prestamo.id as idprestamo', 'cliente.nom as cliente', 'monedas.nombre as moneda', 'formas.nombre as forma_pago', 'user.usuario as usuario')
+        ->join('cliente', 'cliente.id', '=', 'prestamo.cliente_id')
+        ->join('monedas', 'monedas.id',   '=', 'prestamo.moneda')
+        ->join('formas', 'formas.id',   '=', 'prestamo.forma_pago')
+        ->join('user', 'user.id',     '=', 'prestamo.idusuario')
+        ->where('prestamo.id', $prestamo)
+        ->first();
+
+        $nro_prestamo = str_pad($prestamos->idprestamo, 6, "0", STR_PAD_LEFT);
+
+        $C_pagadas = PrestamoDetalle::where('id', $cuota)
+        ->where('prestamo_id', $prestamo)
+        ->firstOrFail();
+
+        $total_pagado = PrestamoDetalle::where('prestamo_id', $prestamo)->where('estado', 1)->sum('monto_cuota');
+        $saldo_restante = $prestamos->monto_total - $total_pagado;
+        
+
+         $pdf = PDF::loadView('prestamoDetalle.pdf', [
+            'prestamo'      => $prestamos,
+            'cuota'         => $C_pagadas,
+            'total_pagado'  => $total_pagado,
+            'saldo_restante'=> $saldo_restante,
+            'nro_prestamo'  => $nro_prestamo
+        ]);
+
+        return $pdf->stream("Comprobante_Cuota_{$cuota}.pdf");
+
+          
+    }
+
 
 
 }

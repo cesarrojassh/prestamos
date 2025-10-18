@@ -45,7 +45,7 @@
     <div class="modal-content">
 
       <div class="modal-header text-white">
-        <h5 class="modal-title" id="modal_detalle_prestamos_label" style="font-size: 12px">Detalle de Préstamo</h5>
+        <h5 class="modal-title" id="modal_detalle_prestamos_label" style="font-size: 15px">Detalle de Préstamo</h5>
       </div>
 
       <div class="modal-body">
@@ -112,6 +112,11 @@
           </div>
 
         </div>
+      </div>
+        <div class="modal-footer border-0 bg-light rounded-bottom-4">
+        <button type="button" class="btn btn-outline-secondary px-4 btn_cancelar" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i>Cancelar
+        </button>
       </div>
     </div>
   </div>
