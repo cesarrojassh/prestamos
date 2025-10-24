@@ -97,13 +97,32 @@
     });
 }
 
-function pagado(){
-    Swal.fire({
-        title: "Cuota pagaga",
-        text: "La cuota ya fue pagada",
-        icon: "warning"
-    });
-}
+function EnviarEmail(id){
+   $.ajax({
 
+        url     : "{{ route('prestamo.send')}}",
+        method  : 'post',
+        data    : {id:id,   _token: "{{ csrf_token() }}",},
+        dataType: 'json',
+        success : function(response){
+            if(!response.status){
+                Swal.fire({
+                    title: "Error",
+                    text: response.msg || "No se pudo registrar el pago.",
+                    icon: "error"
+                });
+               
+                return;
+            }
+             Swal.fire({
+                title: "Correo enviado exitosamente",
+                icon: "success",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+
+   })
+}
 
 </script>

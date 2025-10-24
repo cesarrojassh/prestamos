@@ -7,7 +7,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
         <h6 class="mb-0 text-uppercase fw-bold text-secondary">Lista de Prestamos</h6>
         <div class="d-flex gap-2">
-        <a href="#" class="btn btn-grd btn-grd-royal px-5"><i class="bi bi-plus-lg me-2"></i>Simular Prestamo</a>
+        <a href="{{ route('prestamos.index')}}" class="btn btn-grd btn-grd-royal px-5"><i class="bi bi-plus-lg me-2"></i>Simular Prestamo</a>
     </div>
 </div>
 <hr>

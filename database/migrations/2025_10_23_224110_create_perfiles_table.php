@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserTable extends Migration
+class CreatePerfilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('user', function (Blueprint $table) {
+        Schema::create('perfiles', function (Blueprint $table) {
             $table->id();
-            $table->string('dni');
-            $table->string('usuario');
-            $table->string('password');
-            $table->string('nombres');
-            $table->string('idperfil');
-            $table->tinyInteger('estado')->default(1);
+            $table->string('nombre', 100);
+            $table->tinyInteger('estado')->default(0);
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ class CreateUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user');
+        Schema::dropIfExists('perfiles');
     }
 }

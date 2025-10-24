@@ -9,6 +9,10 @@ Use App\Http\Controllers\PrestamosController;
 Use App\Http\Controllers\MonedaController;
 Use App\Http\Controllers\FormapagoController;
 Use App\Http\Controllers\PrestamoDetalleController;
+Use App\Http\Controllers\UsuariosController;
+Use App\Http\Controllers\PerfilesController;
+
+
 
 
 /*
@@ -63,6 +67,10 @@ Route::post('/prestamos.pagarCuotas',    [PrestamoDetalleController::class, 'pag
 Route::post('/prestamos.datos',          [PrestamoDetalleController::class, 'datos'])->name('prestamos.datos');
 Route::post('/prestamos.efectuar_pago',  [PrestamoDetalleController::class, 'pagar'])->name('prestamos.efectuar_pago');
 Route::get('/prestamos/{prestamo}/cuota/{cuota}/pdf', [PrestamoDetalleController::class, 'pdf'])->name('prestamos.pdf');
+Route::get('cronograma/{prestamo}/pdf',  [PrestamoDetalleController::class, 'cronograma'])->name('cronograma.pdf');
+Route::get('contrato/{prestamo}/pdf',    [PrestamoDetalleController::class, 'contrato'])->name('contrato.pdf');
+Route::post('prestamo.send',             [PrestamoDetalleController::class, 'sendMail'])->name('prestamo.send');
+
 
 //Monedas
 Route::get('/monedas',                   [MonedaController::class, 'index'])->name('monedas.index');
@@ -79,7 +87,33 @@ Route::post('/monedas.destroy',          [MonedaController::class, 'destroy'])->
 
 Route::get('/formaspago',               [FormapagoController::class, 'index'])->name('formaspago.index');
 Route::post('/formaspago.store',        [FormapagoController::class, 'store'])->name('formapagos.store');
-Route::post('/formaspago.update',        [FormapagoController::class, 'update'])->name('formaspago.update');
-Route::post('/formaspago.edit',          [FormapagoController::class, 'edit'])->name('formaspago.edit');
+Route::post('/formaspago.update',       [FormapagoController::class, 'update'])->name('formaspago.update');
+Route::post('/formaspago.edit',         [FormapagoController::class, 'edit'])->name('formaspago.edit');
 Route::get('/formaspago.lista',         [FormapagoController::class, 'lista'])->name('formaspago.lista');
 Route::post('/formaspago.delete',       [FormapagoController::class, 'delete'])->name('formaspago.delete');
+
+
+// Usuarios
+
+Route::get('/usuarios',                 [UsuariosController::class, 'index'])->name('usuario.index');
+Route::get('usuarios.lista',            [UsuariosController::class, 'lista'])->name('usuarios.lista');
+Route::post('usuarios.store',           [UsuariosController::class, 'store'])->name('usuarios.store');
+Route::post('usuarios.details',         [UsuariosController::class, 'details'])->name('usuarios.details');
+Route::post('usuarios.update',          [UsuariosController::class, 'update'])->name('usuarios.update');
+Route::post('usuarios.delete',          [UsuariosController::class, 'delete'])->name('usuario.delete');
+Route::post('usuarios.activar',         [UsuariosController::class, 'activar'])->name('usuario.activar');
+
+//Perfiles
+
+Route::get('/Perfiles',                 [PerfilesController::class, 'index'])->name('perfiles.index');
+Route::post('/Perfiles.store',          [PerfilesController::class, 'store'])->name('perfiles.store');
+Route::get('/Perfiles.lista',          [PerfilesController::class, 'lista'])->name('perfiles.lista');
+
+
+
+
+
+
+
+
+

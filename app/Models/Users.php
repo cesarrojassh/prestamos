@@ -13,6 +13,7 @@ class Users extends Model
         'usuario',
         'password',
         'idperfil',
+        'estado',
        
     ];
     protected $table      = 'user';

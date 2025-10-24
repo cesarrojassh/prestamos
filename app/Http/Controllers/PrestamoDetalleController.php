@@ -8,6 +8,9 @@ use App\Models\PrestamoDetalle;
 use App\Models\Cliente;
 use App\Models\Moneda;
 use App\Models\Formapago;
+use Illuminate\Support\Facades\Mail; 
+use App\Mail\SendMail;
+
 use PDF;
 
 class PrestamoDetalleController extends Controller
@@ -43,7 +46,18 @@ class PrestamoDetalleController extends Controller
         return datatables()
         ->of($prestamos)
         ->addColumn('acciones', function ($prestamo) {
-            return '<a class="text-warning" onclick="verDetalle('.$prestamo->id.')"><i class="bi bi-cash-stack me-1 fs-6"></i></a>';
+            return '<a class="text-warning" onclick="verDetalle('.$prestamo->id.')"><i class="bi bi-cash-stack me-1 fs-6"></i></a>
+              <a class="text-success" title="Ver cronograma PDF" 
+                    href="'.route('cronograma.pdf', ['prestamo' => $prestamo->id]).'" 
+                    target="_blank">
+                    <i class="bi bi-file-earmark-pdf me-1 fs-7"></i>
+               </a>
+                <a class="text-danger" title="Ver Contrato PDF" 
+                    href="'.route('contrato.pdf', ['prestamo' => $prestamo->id]).'" 
+                    target="_blank">
+                    <i class="bi bi-file-earmark-pdf me-1 fs-7"></i>
+               </a>
+               <a class="text-warning" onclick="EnviarEmail('.$prestamo->id.')"><i class="bi bi-send-fill me-1 fs-7"></i></a>';
         })
         ->addColumn('nro_prestamos', function ($prestamo) {
             $nro = str_pad($prestamo->idprestamo, 6, "0", STR_PAD_LEFT);
@@ -274,6 +288,83 @@ class PrestamoDetalleController extends Controller
         return $pdf->stream("Comprobante_Cuota_{$cuota}.pdf");
 
           
+    }
+
+    public function cronograma($prestamo){
+        $prestamos = Prestamo::select('prestamo.*', 'prestamo.id as idprestamo', 'cliente.nom as cliente', 'monedas.nombre as moneda', 'formas.nombre as forma_pago', 'user.usuario as usuario')
+        ->join('cliente', 'cliente.id', '=', 'prestamo.cliente_id')
+        ->join('monedas', 'monedas.id',   '=', 'prestamo.moneda')
+        ->join('formas', 'formas.id',   '=', 'prestamo.forma_pago')
+        ->join('user', 'user.id',     '=', 'prestamo.idusuario')
+        ->where('prestamo.id', $prestamo)
+        ->first();
+
+        $C_pagadas = PrestamoDetalle::where('prestamo_id', $prestamo)->get();
+        $nro_prestamo = str_pad($prestamos->idprestamo, 6, "0", STR_PAD_LEFT);
+        $total_pagado = PrestamoDetalle::where('prestamo_id', $prestamo)->where('estado', 1)->sum('monto_cuota');
+        $saldo_restante = $prestamos->monto_total - $total_pagado;
+        
+
+        $pdf = PDF::loadView('prestamoDetalle.cronograma', [
+            'prestamo'      => $prestamos,
+            'cuota'         => $C_pagadas,
+            'total_pagado'  => $total_pagado,
+            'saldo_restante'=> $saldo_restante,
+            'nro_prestamo'  => $nro_prestamo
+        ]);
+
+        return $pdf->stream("cronograma{$nro_prestamo}.pdf");
+
+    }
+
+    public function contrato($prestamo){
+         $prestamos = Prestamo::select('prestamo.*', 'prestamo.id as idprestamo', 'cliente.nom as cliente', 'monedas.nombre as moneda', 'formas.nombre as forma_pago', 'user.usuario as usuario')
+        ->join('cliente', 'cliente.id', '=', 'prestamo.cliente_id')
+        ->join('monedas', 'monedas.id',   '=', 'prestamo.moneda')
+        ->join('formas', 'formas.id',   '=', 'prestamo.forma_pago')
+        ->join('user', 'user.id',     '=', 'prestamo.idusuario')
+        ->where('prestamo.id', $prestamo)
+        ->first();
+
+        $nro_prestamo = str_pad($prestamos->idprestamo, 6, "0", STR_PAD_LEFT);
+
+        $pdf = PDF::loadView('prestamoDetalle.contrato', [
+            'prestamo'      => $prestamos,
+            'nro_prestamo'  => $nro_prestamo
+        ]);
+
+        return $pdf->stream("cronograma{$nro_prestamo}.pdf");
+    }
+
+    public function sendMail(Request $request){
+        
+        $id = $request->id;
+        $prestamos = Prestamo::select('prestamo.*', 'prestamo.id as idprestamo', 'cliente.nom as cliente', 'monedas.nombre as moneda', 'formas.nombre as forma_pago', 'user.usuario as usuario')
+        ->join('cliente', 'cliente.id', '=', 'prestamo.cliente_id')
+        ->join('monedas', 'monedas.id',   '=', 'prestamo.moneda')
+        ->join('formas', 'formas.id',   '=', 'prestamo.forma_pago')
+        ->join('user', 'user.id',     '=', 'prestamo.idusuario')
+        ->where('prestamo.id', $id)
+        ->first();
+
+        $C_pagadas = PrestamoDetalle::where('prestamo_id', $id)->get();
+        $nro_prestamo = str_pad($prestamos->idprestamo, 6, "0", STR_PAD_LEFT);
+        $total_pagado = PrestamoDetalle::where('prestamo_id', $id)->where('estado', 1)->sum('monto_cuota');
+        $saldo_restante = $prestamos->monto_total - $total_pagado;
+        
+        $data = [
+            'cuotas'        => $C_pagadas,
+            'nro'           => $nro_prestamo,
+            'total_pagado'  => $total_pagado,
+            'saldo_restante'=> $saldo_restante,
+        ];
+
+        Mail::to('cesarjsks@gmail.com')->send(new SendMail($data));
+
+        
+        
+
+
     }
 
 

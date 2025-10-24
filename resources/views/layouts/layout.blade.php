@@ -376,6 +376,20 @@
             <li><a href="{{ route('monedas.index')}}"><i class="material-icons-outlined">arrow_right</i>Moneda</a></li>
           </ul>
         </li> 
+        <li>
+          <a href="javascript:;" class="has-arrow">
+            <div class="parent-icon"><i class="material-icons-outlined">widgets</i>
+            </div>
+            <div class="menu-title">Usuarios</div>
+          </a>
+         
+          <ul>
+            <li><a href="{{ route('usuario.index')}}"><i class="material-icons-outlined">arrow_right</i>Usuarios</a></li>
+            <li><a href="{{ route('perfiles.index')}}"><i class="material-icons-outlined">arrow_right</i>Perfiles</a></li>
+
+          </ul>
+        </li> 
+        
       </ul>
       <!--end navigation-->
   </div>
