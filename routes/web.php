@@ -107,7 +107,14 @@ Route::post('usuarios.activar',         [UsuariosController::class, 'activar'])-
 
 Route::get('/Perfiles',                 [PerfilesController::class, 'index'])->name('perfiles.index');
 Route::post('/Perfiles.store',          [PerfilesController::class, 'store'])->name('perfiles.store');
-Route::get('/Perfiles.lista',          [PerfilesController::class, 'lista'])->name('perfiles.lista');
+Route::get('/Perfiles.lista',           [PerfilesController::class, 'lista'])->name('perfiles.lista');
+Route::post('/Perfiles.details',        [PerfilesController::class, 'details'])->name('perfiles.details');
+Route::post('/Perfiles.update',         [PerfilesController::class, 'update'])->name('perfiles.update');
+Route::post('/Perfiles.delete',         [PerfilesController::class, 'delete'])->name('perfiles.delete');
+Route::post('/Perfiles.activar',        [PerfilesController::class, 'activar'])->name('perfiles.activar');
+
+
+
 
 
 

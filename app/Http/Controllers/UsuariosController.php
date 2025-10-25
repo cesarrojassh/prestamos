@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Users;
+use App\Models\Perfiles;
+
 
 
 class UsuariosController extends Controller
@@ -13,7 +15,9 @@ class UsuariosController extends Controller
         if(!$request->session()->get('id')) {
             return redirect('/');
         }
-        return view('usuarios.index');
+        $perfil = Perfiles::where('estado', 0)->get();
+       
+        return view('usuarios.index', compact('perfil'));
     }
 
     public function lista(Request $request){
@@ -140,7 +144,12 @@ class UsuariosController extends Controller
             ]);
         }
 
-        $users = Users::find($request->id);
+        $users = Users::select('*')
+        ->join('perfiles', 'perfiles.id', '=', 'user.idperfil')
+        ->where('user.id', $request->id)
+        ->first();
+
+        $perfiles = Perfiles::get();
         if(!$users){
             return response()->json([
                 'status' => false,
@@ -150,8 +159,9 @@ class UsuariosController extends Controller
             ]);
         }
         return response()->json([
-            'status' => true,
-            'data'   => $users,
+            'status'     => true,
+            'data'       => $users,
+            'perfiles'   => $perfiles
         ]);
 
 
@@ -167,9 +177,16 @@ class UsuariosController extends Controller
                 'icon'   => 'bi bi-exclamation-triangle', 
             ]);
         } 
-
-        $users = Users::find($request->id);
+        if(empty($request->edit_numdoc) || empty($request->edit_nom) || empty($request->editidperfil) || empty($request->edit_password)){
+            return response()->json([
+                'status' => false,
+                'msg' => 'Todos los campos deben estar llenados',
+                'type' => 'warning',
+                'icon' => 'bi bi-exclamation-triangle',
+            ]);
+        }
       
+        $users = Users::find($request->id);
         if(!$users){
            return response()->json([
                 'status' => false,
@@ -183,8 +200,8 @@ class UsuariosController extends Controller
 
             $users->dni         = $request->edit_numdoc;
             $users->nombres     = $request->edit_nom;
-            $users->idperfil    = 'SUPERVISOR';
-            $users->password     = $request->edit_password;
+            $users->idperfil    = $request->editidperfil;
+            $users->password    = $request->edit_password;
             $users->save();
             if($users){
                  return response()->json([

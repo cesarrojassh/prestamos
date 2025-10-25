@@ -67,8 +67,19 @@ $('body').on('click', '.btn_detail', function(){
             $('#edit_usuario').val(response.data.usuario);
             $('#edit_password').val(response.data.password);
             $('.btn_update').val(response.data.id);
+            var count = response.perfiles.length;
+            var html = ''; 
+            for (let i = 0; i < count; i++) {
+                    let perfil = response.perfiles[i];
+                    if(response.data.idperfil == perfil.id){
+                        html += `<option value="${perfil.id}"selected>${perfil.nombre}</option>`;
+                    }
+                    else{
+                        html += `<option value="${perfil.id}">${perfil.nombre}</option>`;
+                    }
+            }
+            $('#editidperfil').html(html);
             $('#editusuarios').modal('show');
-            
         }
     })
 })
@@ -76,6 +87,7 @@ $('body').on('click', '.btn_detail', function(){
 $('body').on('click', '.btn_update', function(){
     var id = $(this).val();
     let datos =  $('#form_usuario_edit').serialize();
+    
     $.ajax({
 
         url     : "{{ route('usuarios.update') }}",
@@ -84,8 +96,7 @@ $('body').on('click', '.btn_update', function(){
         dataType: 'json',
         success : function(response){
             if(!response.status){
-               $('#form_usuario_edit')[0].reset();
-                Swal.fire({
+                 Swal.fire({
                     icon: 'error',
                     title: 'Error al actualizar al usuario',
                     text: response.msg

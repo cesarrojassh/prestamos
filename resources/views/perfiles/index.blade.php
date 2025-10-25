@@ -65,6 +65,41 @@
   </div>
 </div>
 
+<div class="modal fade" id="editperfiles" tabindex="-1" aria-labelledby="addformapagoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog modal-dialog-scrollable">
+    <div class="modal-content shadow-lg border-0 rounded-4">
+      <!-- HEADER -->
+      <div class="modal-header border-0  text-white py-3 rounded-top-4">
+        <h5 class="modal-title fw-semibold" id="addformapagoLabel">
+         Editar Perfiles
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body bg-light">
+        <form id="form_perfiles" class="row g-3 p-2">
+          <div class="col-md-12">
+            <label for="forma_pago_nombre" class="form-label fw-semibold">Descripcion</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="edit_descripcion" name="edit_descripcion" placeholder="Ingrese descripcion">
+            </div>
+          </div>
+        </form>
+      </div>
+        <!-- FOOTER -->
+      <div class="modal-footer border-0 bg-light rounded-bottom-4">
+        <button type="button" class="btn btn-success px-4 btn_update">
+          <i class="bi bi-check-circle me-1"></i><span class="text-login">Actualizar</span>
+        </button>
+        <button type="button" class="btn btn-outline-secondary px-4 btn_cancelar" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i>Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 @section('scripts')
   @include('perfiles._myjs')

@@ -117,4 +117,164 @@ class PerfilesController extends Controller
         }
         
     }
+
+    public function details(Request $request){
+        if(!$request->ajax()){
+            return response()->json([
+                'status' => false,
+                'msg'    => 'Error en la solicitud, intente nuevamente',
+                'type'   => 'warning',
+                'icon'   => 'bi bi-exclamation-triangle',
+            ]);
+        }
+
+        $id = $request->id;
+        $perfil = Perfiles::where('id', $id)->first();
+        if(!$perfil){
+           return response()->json([
+                'status' => false,
+                'msg' => 'Perfil no encontrado',
+                'type' => 'warning',
+                'icon' => 'bi bi-exclamation-triangle',
+            ]); 
+        }
+        return response()->json([
+            'status' => true,
+            'data'   => $perfil,
+        ]);
+
+    }
+
+    public function update(Request $request){
+
+        if(!$request->ajax()){
+            return response()->json([
+                'status' => false,
+                'msg'    => 'Error en la solicitud, intente nuevamente',
+                'type'   => 'warning',
+                'icon'   => 'bi bi-exclamation-triangle',
+            ]);
+        }
+
+        $id         = $request->id;
+        $nombre     = $request->nombre;
+
+        try{
+
+            $perfil = Perfiles::find($id);
+            $perfil->nombre = $nombre;
+            $perfil->save();
+
+            if($perfil){
+                 return response()->json([
+                    'status' => true,
+                    'msg'    => 'Perfil actualizado exitosamente',
+                    'type'   => 'success',
+                    'icon'   => 'bi bi-check-circle',
+                ]);
+            }
+            return response()->json([
+                'status' => false,
+                'msg' => 'Algo ocurrio, intente nuevamente',
+                'type' => 'warning',
+                'icon' => 'bi bi-exclamation-triangle',
+            ]); 
+        }
+         catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'msg'    => 'Error: ' . $e->getMessage(),
+                'type'   => 'error',
+                'icon'   => 'bi bi-bug',
+            ]);
+        }
+
+    }
+
+    public function delete(Request $request){
+
+         if(!$request->ajax()){
+            return response()->json([
+                'status' => false,
+                'msg'    => 'Error en la solicitud, intente nuevamente',
+                'type'   => 'warning',
+                'icon'   => 'bi bi-exclamation-triangle',
+            ]);
+        }
+
+        try{
+            $id       = $request->id;
+            $perfiles = Perfiles::find($id);
+            $perfiles->estado = 1;
+            $perfiles->save();
+
+             if($perfiles){
+                 return response()->json([
+                    'status' => true,
+                    'msg'    => 'Perfil Desactivado exitosamente',
+                    'type'   => 'success',
+                    'icon'   => 'bi bi-check-circle',
+                ]);
+            }
+             return response()->json([
+                'status' => false,
+                'msg' => 'Algo ocurrio, intente nuevamente',
+                'type' => 'warning',
+                'icon' => 'bi bi-exclamation-triangle',
+            ]); 
+       
+        }
+        catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'msg'    => 'Error: ' . $e->getMessage(),
+                'type'   => 'error',
+                'icon'   => 'bi bi-bug',
+            ]);
+        }
+    }
+
+
+    public function activar(Request $request){
+
+        if(!$request->ajax()){
+            return response()->json([
+                'status' => false,
+                'msg'    => 'Error en la solicitud, intente nuevamente',
+                'type'   => 'warning',
+                'icon'   => 'bi bi-exclamation-triangle',
+            ]);
+        }
+
+        try{
+            $id       = $request->id;
+            $perfiles = Perfiles::find($id);
+            $perfiles->estado = 0;
+            $perfiles->save();
+
+             if($perfiles){
+                 return response()->json([
+                    'status' => true,
+                    'msg'    => 'Perfil activado exitosamente',
+                    'type'   => 'success',
+                    'icon'   => 'bi bi-check-circle',
+                ]);
+            }
+             return response()->json([
+                'status' => false,
+                'msg' => 'Algo ocurrio, intente nuevamente',
+                'type' => 'warning',
+                'icon' => 'bi bi-exclamation-triangle',
+            ]); 
+       
+        }
+        catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'msg'    => 'Error: ' . $e->getMessage(),
+                'type'   => 'error',
+                'icon'   => 'bi bi-bug',
+            ]);
+        }
+    }
 }

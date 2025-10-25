@@ -70,7 +70,9 @@
             <label for="cli_nom" class="form-label fw-semibold">Perfil</label>
             <select type="text" class="form-control" id="idperfil" name="idperfil">
               <option>[Seleccione]</option>
-              <option>SUPERVISOR</option>
+              @foreach($perfil as $perfiles)
+               <option value="{{ $perfiles->id }}">{{ $perfiles->nombre}}</option>
+              @endforeach
             </select>
           </div>
        
@@ -125,8 +127,7 @@
            <div class="col-md-6">
             <label for="cli_nom" class="form-label fw-semibold">Perfil</label>
             <select type="text" class="form-control" id="editidperfil" name="editidperfil">
-              <option>[Seleccione]</option>
-              <option>SUPERVISOR</option>
+             
             </select>
           </div>
        
