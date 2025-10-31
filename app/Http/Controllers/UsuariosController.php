@@ -30,7 +30,10 @@ class UsuariosController extends Controller
             ]);
         }
 
-        $usuarios = Users::orderBy('id', 'desc')->get();
+         $usuarios = Users::select('*', 'perfiles.nombre as perfilnombre')
+        ->join('perfiles', 'perfiles.id', '=', 'user.idperfil')
+        ->get();
+
         return Datatables()
         ->of($usuarios)
          ->addColumn('action', function($usuarios) {

@@ -64,12 +64,14 @@ class FormapagoController extends Controller
                  $btn = '<button type="button" class="btn btn-sm btn-primary btn_detail" data-id="'.$id.'" 
                     style="padding: 3px 6px; font-size: 12px;">
                     <i class="bi bi-pencil-square"></i>
-                </button> <button type="button" class="btn btn-sm btn-danger btn-delete" data-id="'.$id.'" 
+                </button> 
+                <button type="button" class="btn btn-sm btn-danger btn-delete" data-id="'.$id.'" 
                     style="padding: 3px 6px; font-size: 12px;">
                     <i class="bi bi-trash"></i>
                 </button> ';
             return $btn;
         })
+
         ->rawColumns(['action'])
         ->make(true);
     }

@@ -6,28 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Maxton | Bootstrap 5 Admin Dashboard Template</title>
   <!--favicon-->
-  <link rel="icon" href="assets/images/favicon-32x32.png" type="image/png">
+  <link rel="icon" href="{{ asset('assets/images/favicon-32x32.png')}}" type="image/png">
   <!-- loader-->
-  <link href="assets/css/pace.min.css" rel="stylesheet">
-  <script src="assets/js/pace.min.js"></script>
+  <link href="{{ asset('assets/css/pace.min.css')}}" rel="stylesheet">
+  <script src="{{ asset('assets/js/pace.min.js')}}"></script>
 
   <!--plugins-->
-  <link href="assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="assets/plugins/metismenu/metisMenu.min.css">
-  <link rel="stylesheet" type="text/css" href="assets/plugins/metismenu/mm-vertical.css">
-  <link rel="stylesheet" type="text/css" href="assets/plugins/simplebar/css/simplebar.css">
+  <link href="{{ asset('assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/metismenu/metisMenu.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/metismenu/mm-vertical.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/simplebar/css/simplebar.css') }}">
   <!--bootstrap css-->
-  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
   <link href="{{ asset('bootstrap-icons.css') }}" rel="stylesheet">
   <!--main css-->
-  <link href="assets/css/bootstrap-extended.css" rel="stylesheet">
-  <link href="sass/main.css" rel="stylesheet">
-  <link href="sass/dark-theme.css" rel="stylesheet">
-  <link href="sass/blue-theme.css" rel="stylesheet">
-  <link href="sass/semi-dark.css" rel="stylesheet">
-  <link href="sass/bordered-theme.css" rel="stylesheet">
-  <link href="sass/responsive.css" rel="stylesheet">
-  <link href="assets/plugins/datatable/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <link href="{{ asset('assets/css/bootstrap-extended.css') }}" rel="stylesheet">
+  <link href="{{ asset('sass/main.css') }}" rel="stylesheet">
+  <link href="{{ asset('sass/dark-theme.css') }}" rel="stylesheet">
+  <link href="{{ asset('sass/blue-theme.css') }}" rel="stylesheet">
+  <link href="{{ asset('sass/semi-dark.css') }}" rel="stylesheet">
+  <link href="{{ asset('sass/bordered-theme.css') }}" rel="stylesheet">
+  <link href="{{ asset('sass/responsive.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
   <link href="{{ asset('select2.min.css') }}" rel="stylesheet">
@@ -114,7 +114,7 @@
 
                 <div class="search-list-item d-flex align-items-center gap-3">
                   <div class="memmber-img">
-                    <img src="assets/images/avatars/02.png" width="32" height="32" class="rounded-circle" alt="">
+                    <img src="{{ asset('assets/images/avatars/02.png') }}" width="32" height="32" class="rounded-circle" alt="">
                   </div>
                   <div class="">
                     <h5 class="mb-0 search-list-title ">Snetro Jhonia</h5>
@@ -123,7 +123,7 @@
 
                 <div class="search-list-item d-flex align-items-center gap-3">
                   <div class="memmber-img">
-                    <img src="assets/images/avatars/03.png" width="32" height="32" class="rounded-circle" alt="">
+                    <img src="{{ asset('assets/images/avatars/03.png') }}" width="32" height="32" class="rounded-circle" alt="">
                   </div>
                   <div class="">
                     <h5 class="mb-0 search-list-title">Michle Clark</h5>
@@ -170,7 +170,7 @@
               <a class="dropdown-item border-bottom py-2" href="javascript:;">
                 <div class="d-flex align-items-center gap-3">
                   <div class="">
-                    <img src="assets/images/avatars/01.png" class="rounded-circle" width="45" height="45" alt="">
+                    <img src="{{ asset('assets/images/avatars/01.png') }}" class="rounded-circle" width="45" height="45" alt="">
                   </div>
                   <div class="">
                     <h5 class="notify-title">Congratulations Jhon</h5>
@@ -204,7 +204,7 @@
               <a class="dropdown-item border-bottom py-2" href="javascript:;">
                 <div class="d-flex align-items-center gap-3">
                   <div class="">
-                    <img src="assets/images/apps/13.png" class="rounded-circle" width="45" height="45" alt="">
+                    <img src="{{ asset('assets/images/apps/13.png')}}" class="rounded-circle" width="45" height="45" alt="">
                   </div>
                   <div class="">
                     <h5 class="notify-title">Payment Recived</h5>
@@ -221,7 +221,7 @@
               <a class="dropdown-item border-bottom py-2" href="javascript:;">
                 <div class="d-flex align-items-center gap-3">
                   <div class="">
-                    <img src="assets/images/apps/14.png" class="rounded-circle" width="45" height="45" alt="">
+                    <img src="{{ asset('assets/images/apps/14.png') }}" class="rounded-circle" width="45" height="45" alt="">
                   </div>
                   <div class="">
                     <h5 class="notify-title">New Order Recived</h5>
@@ -278,12 +278,12 @@
       </li>
       <li class="nav-item dropdown">
         <a href="javascrpt:;" class="dropdown-toggle dropdown-toggle-nocaret" data-bs-toggle="dropdown">
-           <img src="assets/images/avatars/01.png" class="rounded-circle p-1 border" width="45" height="45" alt="">
+           <img src="{{ asset('assets/images/avatars/01.png') }}" class="rounded-circle p-1 border" width="45" height="45" alt="">
         </a>
         <div class="dropdown-menu dropdown-user dropdown-menu-end shadow">
           <a class="dropdown-item  gap-2 py-2" href="javascript:;">
             <div class="text-center">
-              <img src="assets/images/user.png" class="rounded-circle p-1 shadow mb-3" width="90" height="90" alt="">
+              <img src="{{ asset('assets/images/user.png') }}" class="rounded-circle p-1 shadow mb-3" width="90" height="90" alt="">
               <h5 class="user-name mb-0 fw-bold" style="font-size:10px">{{ session('nombre')}}</h5>
             </div>
           </a>
@@ -305,7 +305,7 @@
 <aside class="sidebar-wrapper" data-simplebar="true">
   <div class="sidebar-header">
     <div class="logo-icon">
-      <img src="assets/images/logo-icon.png" class="logo-img" alt="">
+      <img src="{{ asset('assets/images/logo-icon.png') }}" class="logo-img" alt="">
     </div>
     <div class="logo-name flex-grow-1">
       <h5 class="mb-0">Maxton</h5>
@@ -316,81 +316,48 @@
   </div>
   <div class="sidebar-nav">
       <!--navigation-->
-      <ul class="metismenu" id="sidenav">
-        <li>
-          <a href="#" class="has-arrow">
-            <div class="parent-icon"><i class="material-icons-outlined">home</i>
-            </div>
-            <div class="menu-title">Tablero Principal</div>
-          </a>
-          <ul>
-            
-          </ul>
-        </li>
-        <li>
-          <a href="javascript:;" class="has-arrow">
-            <div class="parent-icon"><i class="material-icons-outlined">widgets</i>
-            </div>
-            <div class="menu-title">Caja</div>
-          </a>
-         
-          <ul>
-            <li><a href="{{ route('caja.index')}}"><i class="material-icons-outlined">arrow_right</i>Aperturar Caja</a>
-            </li>
-            <li><a href="#"><i class="material-icons-outlined">arrow_right</i>Ingresos / Gastos</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="javascript:;" class="has-arrow">
-            <div class="parent-icon"><i class="material-icons-outlined">widgets</i>
-            </div>
-            <div class="menu-title">Clientes</div>
-          </a>
-         
-          <ul>
-           <li><a href="{{ route('clientes.index')}}"><i class="material-icons-outlined">arrow_right</i>Lista de Clientes</a></li>
-          </ul>
-        </li>
-         <li>
-          <a href="javascript:;" class="has-arrow">
-            <div class="parent-icon"><i class="material-icons-outlined">widgets</i>
-            </div>
-            <div class="menu-title">Prestamos</div>
-          </a>
-         
-          <ul>
-            <li><a href="{{ route('prestamos.index')}}"><i class="material-icons-outlined">arrow_right</i>Solicitud</a></li>
-            <li><a href="{{ route('prestamos.detalle')}}"><i class="material-icons-outlined">arrow_right</i>Lista de prestamos</a></li>
-          </ul>
-        </li>
-         <li>
-          <a href="javascript:;" class="has-arrow">
-            <div class="parent-icon"><i class="material-icons-outlined">widgets</i>
-            </div>
-            <div class="menu-title">Mantenimiento</div>
-          </a>
-         
-          <ul>
-            <li><a href="{{ route('formaspago.index')}}"><i class="material-icons-outlined">arrow_right</i>Formas de pago</a></li>
-            <li><a href="{{ route('monedas.index')}}"><i class="material-icons-outlined">arrow_right</i>Moneda</a></li>
-          </ul>
-        </li> 
-        <li>
-          <a href="javascript:;" class="has-arrow">
-            <div class="parent-icon"><i class="material-icons-outlined">widgets</i>
-            </div>
-            <div class="menu-title">Usuarios</div>
-          </a>
-         
-          <ul>
-            <li><a href="{{ route('usuario.index')}}"><i class="material-icons-outlined">arrow_right</i>Usuarios</a></li>
-            <li><a href="{{ route('perfiles.index')}}"><i class="material-icons-outlined">arrow_right</i>Perfiles</a></li>
+     <ul class="metismenu" id="sidenav">
 
-          </ul>
-        </li> 
+        @if(isset($menu_modulos))
+            @foreach ($menu_modulos as $padre)
+                <li>
+                    @php
+                        // Lógica para el enlace padre
+                        $href = 'javascript:;'; // Default para padres con hijos (Caja, Clientes)
+                        
+                        if ($padre->hijos->count() == 0) {
+                            // Si NO tiene hijos, el enlace es su ruta guardada
+                            // (Ej: para "Tablero Principal", la ruta es '#' y está bien)
+                            // (Si creas un link simple con ruta 'admin', también funcionará)
+                            $href = ($padre->ruta == '#') ? '#' : route($padre->ruta);
+                        }
+                    @endphp
+
+                    {{-- 
+                      La clave es que Metismenu espera SIEMPRE el 'has-arrow'
+                      y SIEMPRE el <ul>
+                    --}}
+                    <a href="{{ $href }}" class="has-arrow">
+                        <div class="parent-icon"><i class="material-icons-outlined">widgets</i></div>
+                        <div class="menu-title">{{ $padre->modulo_nombre }}</div>
+                    </a>
+
+                    {{-- SIEMPRE incluimos el <ul> --}}
+                    {{-- Si no hay hijos, el @foreach no hace nada y queda <ul></ul> (¡Correcto!) --}}
+                    <ul>
+                        @foreach ($padre->hijos as $hijo)
+                            <li>
+                                <a href="{{ route($hijo->ruta) }}">
+                                    <i class="material-icons-outlined">arrow_right</i>{{ $hijo->modulo_nombre }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
+            @endforeach
+        @endif
         
-      </ul>
+    </ul>
       <!--end navigation-->
   </div>
 </aside>
@@ -448,7 +415,7 @@
       <div class="order-list">
         <div class="order-item d-flex align-items-center gap-3 p-3 border-bottom">
           <div class="order-img">
-            <img src="assets/images/user.png" class="img-fluid rounded-3" width="75" alt="">
+            <img src="{{ asset('assets/images/user.png') }}" class="img-fluid rounded-3" width="75" alt="">
           </div>
           <div class="order-info flex-grow-1">
             <h5 class="mb-1 order-title">White Men Shoes</h5>
@@ -591,25 +558,25 @@
   <!--start switcher-->
 
 <!-- jQuery debe cargarse antes que Bootstrap -->
-<script src="assets/js/jquery.min.js"></script>
+<script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 
 <!-- Bootstrap -->
-<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="{{asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 
 <!-- Plugins -->
-<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
-<script src="assets/plugins/metismenu/metisMenu.min.js"></script>
-<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
-<script src="assets/plugins/apexchart/apexcharts.min.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="{{ asset('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
+<script src="{{ asset('assets/plugins/metismenu/metisMenu.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/apexchart/apexcharts.min.js') }}"></script>
+<script src="{{ asset('assets/js/main.js') }}"></script>
 
 <!-- DataTables -->
 <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
-<script src="assets/plugins/notifications/js/lobibox.min.js"></script>
-<script src="assets/plugins/notifications/js/notifications.min.js"></script>
+<script src="{{ asset('assets/plugins/notifications/js/lobibox.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/notifications/js/notifications.min.js') }}"></script>
 <script src="{{ asset('notificaciones.js')}}"></script>
-<link   rel="stylesheet" href="assets/plugins/notifications/css/lobibox.min.css">
+<link   rel="stylesheet" href="{{ asset('assets/plugins/notifications/css/lobibox.min.css')}}">
 <script src="{{ asset('jquery-ui.min.js') }}"></script>
 <script src="{{ asset('select2.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/apexchart/apexcharts.min.js') }}"></script>

@@ -11,6 +11,8 @@ Use App\Http\Controllers\FormapagoController;
 Use App\Http\Controllers\PrestamoDetalleController;
 Use App\Http\Controllers\UsuariosController;
 Use App\Http\Controllers\PerfilesController;
+Use App\Http\Controllers\ModulosController;
+
 
 
 
@@ -112,6 +114,25 @@ Route::post('/Perfiles.details',        [PerfilesController::class, 'details'])-
 Route::post('/Perfiles.update',         [PerfilesController::class, 'update'])->name('perfiles.update');
 Route::post('/Perfiles.delete',         [PerfilesController::class, 'delete'])->name('perfiles.delete');
 Route::post('/Perfiles.activar',        [PerfilesController::class, 'activar'])->name('perfiles.activar');
+Route::get('/Perfiles.modulos/{id}',    [PerfilesController::class, 'activar_modulos'])->name('perfiles.modulos');
+Route::post('/Perfiles.asignar',        [PerfilesController::class, 'asignar'])->name('modulos.asignar');
+
+
+
+
+
+//Modulos
+
+Route::get('/Modulos',                 [ModulosController::class, 'index'])->name('modulos.index');
+Route::post('/Modulos.store',          [ModulosController::class, 'store'])->name('modulos.store');
+Route::get('/Modulos.lista',           [ModulosController::class, 'lista'])->name('modulos.lista');
+Route::post('/Modulos.details',        [ModulosController::class, 'details'])->name('modulos.details');
+Route::post('/Modulos.update',         [ModulosController::class, 'update'])->name('modulos.update');
+Route::post('/Modulos.delete',         [ModulosController::class, 'delete'])->name('modulos.delete');
+Route::post('/Modulos.activar',        [ModulosController::class, 'activar'])->name('modulos.activar');
+
+
+
 
 
 

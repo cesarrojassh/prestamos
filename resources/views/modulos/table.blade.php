@@ -1,6 +1,6 @@
 <script>
     function load_datatable() {
-        let datatable = $('#lista_usuarios').DataTable({
+        let datatable = $('#lista_modulos').DataTable({
             serverSide  : true,
             paging      : true,
             searching   : true,
@@ -27,11 +27,12 @@
                     previous: "Anterior"
                 }
             },
-            ajax: "{{ route('usuarios.lista') }}",
+            ajax: "{{ route('modulos.lista') }}",
             columns: [
                 { data: 'action', className: 'text-center' },
-                { data: 'nombres', className: 'text-center' },
-                { data: 'perfilnombre', className: 'text-center' },
+                { data: 'tipo', className: 'text-center' },
+                { data: 'modulo_nombre', className: 'text-center' },
+                { data: 'ruta', className: 'text-center' },
                 { data: 'estado', className: 'text-center' },
 
               

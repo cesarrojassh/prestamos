@@ -15,4 +15,8 @@ class Perfiles extends Model
     ];
     protected $table      = 'perfiles';
     protected $primaryKey = 'id';
+    public function modulos()
+    {
+       return $this->belongsToMany(Modulos::class, 'perfil_modulos', 'perfil_id', 'modulo_id');
+    }
 }
