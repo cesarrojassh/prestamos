@@ -58,10 +58,9 @@
                        @endforeach
                     </select>
                 </div>
-
                 <div class="col-md-6">
                     <label for="fecha_emision" class="form-label">Fecha de emisión</label>
-                    <input type="date" id="fecha_emision" class="form-control" required>
+                    <input type="date" id="fecha_emision" class="form-control" value="{{ date('Y-m-d')}}"required>
                 </div>
 
               <div class="col-md-6 d-flex align-items-end">

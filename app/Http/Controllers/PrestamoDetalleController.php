@@ -10,7 +10,7 @@ use App\Models\Moneda;
 use App\Models\Formapago;
 use Illuminate\Support\Facades\Mail; 
 use App\Mail\SendMail;
-
+use App\Services\WhatsAppService;
 use PDF;
 
 class PrestamoDetalleController extends Controller
@@ -40,6 +40,7 @@ class PrestamoDetalleController extends Controller
         ->join('monedas', 'monedas.id',   '=', 'prestamo.moneda')
         ->join('formas', 'formas.id',   '=', 'prestamo.forma_pago')
         ->join('user', 'user.id',     '=', 'prestamo.idusuario')
+        ->orderBy('idprestamo', 'desc')
         ->get();
 
        
@@ -210,7 +211,7 @@ class PrestamoDetalleController extends Controller
             ]);
         }
 
-      
+       
         $id = $request->id;
         $cuota = PrestamoDetalle::find($id);
         if (!$cuota) {
@@ -230,11 +231,8 @@ class PrestamoDetalleController extends Controller
                 'icon'   => 'bi bi-exclamation-triangle',
             ]);
         }
-
         $cuota->estado = 1;
         $cuota->save();
-
-     
         $prestamo_id    = $cuota->prestamo_id;
         $total_cuotas   = PrestamoDetalle::where('prestamo_id', $prestamo_id)->count();
         $cuotas_pagadas = PrestamoDetalle::where('prestamo_id', $prestamo_id)->where('estado', 1)->count();
@@ -244,11 +242,13 @@ class PrestamoDetalleController extends Controller
                 $prestamo->estado = 'cancelado';
                 $prestamo->save();
                 
-               
+                Cliente::where('id', $prestamo->cliente_id)->update([
+                    'estado_prestamo' => 0
+                ]);
+                
             }
+            
         }
-        
-
         return response()->json([
             'status' => true,
             'msg'    => 'Cuota pagada correctamente',
@@ -336,36 +336,45 @@ class PrestamoDetalleController extends Controller
         return $pdf->stream("cronograma{$nro_prestamo}.pdf");
     }
 
-    public function sendMail(Request $request){
-        
-        $id = $request->id;
-        $prestamos = Prestamo::select('prestamo.*', 'prestamo.id as idprestamo', 'cliente.nom as cliente', 'monedas.nombre as moneda', 'formas.nombre as forma_pago', 'user.usuario as usuario')
+    public function sendMail(Request $request, WhatsAppService $whatsapp)
+{
+    $id = $request->id;
+
+    // Ejemplo: obtener datos del préstamo
+    $prestamo = Prestamo::select('prestamo.*', 'cliente.nom as cliente')
         ->join('cliente', 'cliente.id', '=', 'prestamo.cliente_id')
-        ->join('monedas', 'monedas.id',   '=', 'prestamo.moneda')
-        ->join('formas', 'formas.id',   '=', 'prestamo.forma_pago')
-        ->join('user', 'user.id',     '=', 'prestamo.idusuario')
         ->where('prestamo.id', $id)
         ->first();
 
-        $C_pagadas = PrestamoDetalle::where('prestamo_id', $id)->get();
-        $nro_prestamo = str_pad($prestamos->idprestamo, 6, "0", STR_PAD_LEFT);
-        $total_pagado = PrestamoDetalle::where('prestamo_id', $id)->where('estado', 1)->sum('monto_cuota');
-        $saldo_restante = $prestamos->monto_total - $total_pagado;
-        
-        $data = [
-            'cuotas'        => $C_pagadas,
-            'nro'           => $nro_prestamo,
-            'total_pagado'  => $total_pagado,
-            'saldo_restante'=> $saldo_restante,
-        ];
+    $total_pagado = PrestamoDetalle::where('prestamo_id', $id)->where('estado', 1)->sum('monto_cuota');
+    $saldo_restante = $prestamo->monto_total - $total_pagado;
+    $nro_prestamo = str_pad($prestamo->id, 6, "0", STR_PAD_LEFT);
 
-        Mail::to('cesarjsks@gmail.com')->send(new SendMail($data));
+    $message = "Estimado(a) {$prestamo->cliente},\n";
+    $message .= "Su préstamo #{$nro_prestamo} tiene un total pagado de {$total_pagado} y saldo restante de {$saldo_restante}.";
 
-        
-        
+    // Número de destino (ejemplo desde tu tabla cliente)
+    $telefono = '51917581487'; // asegúrate de que esté en formato 519XXXXXXXX
 
+    // Enviar mensaje WhatsApp
+    $response = $whatsapp->sendMessage($telefono, $message);
 
-    }
+    // Opcional: enviar también correo
+    /*
+    $data = [
+        'prestamo' => $prestamo,
+        'total_pagado' => $total_pagado,
+        'saldo_restante' => $saldo_restante,
+    ];
+    Mail::to($prestamo->email)->send(new SendMail($data));
+    */
+
+    return response()->json([
+        'status' => 'Mensaje enviado!',
+        'respuesta_whatsapp' => $response
+    ]);
+}
+
 
 
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Perfiles;
 use App\Models\Modulos;
 use App\Models\PerfilModulos;
+use DB;
 
 
 class PerfilesController extends Controller
@@ -98,7 +99,7 @@ class PerfilesController extends Controller
         try{
 
             $perfiles = new Perfiles();
-            $perfiles->nombre = $request->nombre;
+            $perfiles->nombre = strtoupper($request->nombre);
             $perfiles->estado = 0;
             $perfiles->save();
 
@@ -178,7 +179,7 @@ class PerfilesController extends Controller
         try{
 
             $perfil = Perfiles::find($id);
-            $perfil->nombre = $nombre;
+            $perfil->nombre = strtoupper($nombre);
             $perfil->save();
 
             if($perfil){
@@ -295,24 +296,25 @@ class PerfilesController extends Controller
     }
 
    public function activar_modulos($id)
-{
-    
-    $perfil = Perfiles::with('modulos')->find($id);
-    $modulos_padre = Modulos::where('modulo_padre', 0) 
-    ->with('hijos')
-    ->orderBy('orden', 'asc')
-    ->get();
+    {
+        
+        $perfil = Perfiles::with('modulos')->find($id);
+        $modulos_padre = Modulos::where('modulo_padre', 0) 
+        ->with('hijos')
+        ->orderBy('orden', 'asc')
+        ->get();
 
-                
-   $modulos_asignados = $perfil->modulos->pluck('id')->toArray();
+        $modulos_asignados = $perfil->modulos->pluck('id')->toArray();
 
-    
-    return view('perfil_modulos.index', [
-        'perfil'            => $perfil,
-        'modulos_padre'     => $modulos_padre, 
-        'modulos_asignados' => $modulos_asignados 
-    ]);
-}
+        
+        return view('perfil_modulos.index', [
+            'perfil'            => $perfil,
+            'modulos_padre'     => $modulos_padre, 
+            'modulos_asignados' => $modulos_asignados 
+        ]);
+    }
+
+
 
     public function asignar(Request $request){
         if(!$request->ajax()){
@@ -323,15 +325,35 @@ class PerfilesController extends Controller
                 'icon'   => 'bi bi-exclamation-triangle',
             ]);
         }
-        $modulo     = $request->modulos;
-        $idperfil   = $request->idperfil;
-        foreach($modulo as $modulos){
-            $insert = new PerfilModulos();
-            $insert->idperfil  = $idperfil;
-            $insert->modulo_id = $modulos;
-            $insert->save();
+
+        $modulos   = $request->modulos ?? []; 
+        $idperfil  = $request->idperfil;
+
+        if(empty($idperfil)){
+            return response()->json([
+                'status' => false,
+                'msg'    => 'Debe seleccionar un perfil',
+                'type'   => 'info',
+                'icon'   => 'bi bi-info-circle',
+            ]);
         }
 
+        DB::transaction(function() use ($idperfil, $modulos) {
+           PerfilModulos::where('perfil_id', $idperfil)->delete();
+            foreach($modulos as $modulo){
+                PerfilModulos::create([
+                    'perfil_id' => $idperfil,
+                    'modulo_id' => $modulo,
+                ]);
+            }
+        });
+        
 
+        return response()->json([
+            'status' => true,
+            'msg'    => 'Módulos actualizados correctamente',
+            'type'   => 'success',
+            'icon'   => 'bi bi-check-circle',
+        ]);
     }
 }

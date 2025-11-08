@@ -13,7 +13,7 @@ class ModulosController extends Controller
         if(!$request->session()->get('id')) {
             return redirect('/');
         }
-        $modulos = Modulos::where('modulo_padre', '!=', 0)->get();
+        $modulos = Modulos::where('modulo_padre', '=', 0)->get();
         return view('modulos.index', compact('modulos'));
     }
 

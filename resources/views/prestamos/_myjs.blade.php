@@ -176,7 +176,7 @@ $('#btnGuardarPrestamo').click(function(){
             if(response.status === 'success'){
                 toast_info('Préstamo guardado con éxito', 'success', 'bi bi-check-circle');
                 setTimeout(function(){
-                    window.location.href = "{{ route('prestamos.index') }}";
+                    window.location.href = "{{ route('prestamos.detalle') }}";
                 }, 1500);
             } else {
                 toast_info('Error al guardar el préstamo', 'danger', 'bi bi-x-circle');

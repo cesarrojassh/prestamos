@@ -214,6 +214,11 @@ class PrestamosController extends Controller
             $cuota->monto_cuota = $valorCuota;
             $cuota->save();
         }
+        // Actualizando a Cliente Con Prestamo
+        
+        Cliente::where('id', $request->input('cliente'))->update([
+            'estado_prestamo' => 1
+        ]);
 
         return response()->json([
             'status' => 'success',

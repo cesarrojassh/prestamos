@@ -9,30 +9,25 @@ class CreatePerfilModulosTable extends Migration
     public function up()
     {
         Schema::create('perfil_modulos', function (Blueprint $table) {
-            // No necesitamos un 'id' autoincremental
-            // $table->id(); 
-
-            // Columna para el Perfil
+            // Columnas principales
             $table->unsignedBigInteger('perfil_id');
-            // Columna para el Modulo
             $table->unsignedBigInteger('modulo_id');
 
-            // --- Definir las Claves Foráneas ---
+            // Timestamps
+            $table->timestamps();
 
-            // Conecta 'perfil_id' con la tabla 'perfiles'
+            // --- Claves foráneas ---
             $table->foreign('perfil_id')
-                  ->references('id')
-                  ->on('perfiles')
-                  ->onDelete('cascade'); // Si se borra un perfil, se borra la asignación
+                ->references('id')
+                ->on('perfiles')
+                ->onDelete('cascade');
 
-            // Conecta 'modulo_id' con la tabla 'modulos'
             $table->foreign('modulo_id')
-                  ->references('id')
-                  ->on('modulos')
-                  ->onDelete('cascade'); // Si se borra un módulo, se borra la asignación
+                ->references('id')
+                ->on('modulos')
+                ->onDelete('cascade');
 
-            // --- Definir la Clave Primaria ---
-            // Esto evita duplicados (ej. no se puede asignar el mismo módulo 2 veces al mismo perfil)
+            // --- Clave primaria compuesta ---
             $table->primary(['perfil_id', 'modulo_id']);
         });
     }

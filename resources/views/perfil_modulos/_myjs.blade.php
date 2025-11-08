@@ -14,12 +14,20 @@
                 data: formData + '&idperfil=' + idperfil,
                 dataType: 'json', 
                 success: function(response) {
-                    if (response.success) {
-                    
-                        alert(response.mensaje); 
+                    if (!response.status){
+                            Swal.fire({
+                            icon: 'error',
+                            title: 'Error guardando la moneda',
+                            text: response.msg
+                        });
+                        return
+                        
                     } else {
-                     
-                        alert('Error: ' + response.mensaje);
+                        Swal.fire({
+                        icon: 'success',
+                        title: 'Modulos asignados',
+                        text: response.msg
+                        });
                     }
                 },
             });
